@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
+	"github.com/joho/godotenv"
 	"gochat/config/fiber"
+	"log"
 )
 
 var (
@@ -11,11 +13,13 @@ var (
 
 func main() {
 	flag.Parse()
-	server := &fiber.Server{}
-	if *prod {
-		server = server.NewProdConfig("Go Chat Application", "1.0.0")
-	} else {
-		server = server.NewDevConfig("Go Chat Application", "1.0.0")
+
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatal("Error loading .env file")
 	}
-	server.Serve(*prod)
+
+	server := &fiber.Server{}
+	server = server.NewConfig("Go Chat Application", "1.0.0")
+
+	server.Run(*prod)
 }

@@ -26,5 +26,5 @@ start_prod: build
 	# Start The Application
 	./bin/main -prod
 
-all: compile start
+all: compile start_prod
 

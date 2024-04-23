@@ -8,6 +8,12 @@ import (
 func UserRouter(r fiber.Router) {
 	userRouter := r.Group("/user/")
 
-	userRouter.Get("/login/", controllers.Login)
+	authRouter(userRouter)
+}
+
+func authRouter(r fiber.Router) {
+	userRouter := r.Group("/auth/")
+
 	userRouter.Post("/register/", controllers.Register)
+	userRouter.Get("/login/", controllers.Login)
 }

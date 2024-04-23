@@ -41,3 +41,7 @@ func (l *Logger) Error(msg string, args ...interface{}) {
 func (l *Logger) Debug(msg string, args ...interface{}) {
 	l.logger.Debug(append([]interface{}{l.operator, fmt.Sprintf("\t"), msg, ": "}, args...)...)
 }
+
+func (l *Logger) Fatal(msg string, args ...interface{}) {
+	l.logger.Fatal(append([]interface{}{l.operator, fmt.Sprintf("\t"), msg, ": "}, args...)...)
+}

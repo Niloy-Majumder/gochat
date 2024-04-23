@@ -10,14 +10,14 @@ var logger = loggerStruct.New("User Controller")
 
 func Login(ctx *fiber.Ctx) error {
 
-	logger.Info("Login Consumed", "2nd Param ", "3rd param")
+	logger.Info("Login Consumed", string(ctx.Body()))
 
 	return ctx.SendString("User LoggedIn")
 }
 
 func Register(ctx *fiber.Ctx) error {
 
-	logger.Info("Registered Consumed", "2nd Param ", "3rd param")
+	logger.Info("Registered Consumed", string(ctx.Body()))
 
-	return ctx.SendString("User Registered")
+	return ctx.Status(200).SendString("User Registered")
 }
