@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"gochat/api/v1/services"
 	zaplogger "gochat/config/logger"
 )
 
@@ -17,7 +18,13 @@ func Login(ctx *fiber.Ctx) error {
 
 func Register(ctx *fiber.Ctx) error {
 
-	logger.Info("Registered Consumed", string(ctx.Body()))
+	logger.Info("Registered User", string(ctx.Body()))
+
+	userService := services.UserService{}
+	err := userService.CreateUser(ctx.Body())
+	if err != nil {
+		return err
+	}
 
 	return ctx.Status(200).SendString("User Registered")
 }

@@ -10,7 +10,7 @@ type Actions interface {
 	insert(entity interface{}) error
 	findById(id string, result interface{}) error
 	find(query interface{}, limit int, skip int, sort interface{}, result []interface{}) error
-	findOneAndUpdate(query interface{}, entity interface{}) (result interface{}, e error)
+	findOneAndUpdate(query interface{}, entity interface{}) error
 	delete(id string) error
 }
 
@@ -42,8 +42,8 @@ func (b *BaseActions) findById(id string, result interface{}) error {
 func (b *BaseActions) find(query interface{}, limit int, skip int, sort interface{}, result []interface{}) (e error) {
 	return nil
 }
-func (b *BaseActions) findOneAndUpdate(query interface{}, entity interface{}) (result interface{}, e error) {
-	return nil, nil
+func (b *BaseActions) findOneAndUpdate(query interface{}, entity interface{}) error {
+	return nil
 }
 
 func (b *BaseActions) delete(id string) error {
