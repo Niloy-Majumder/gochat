@@ -11,6 +11,11 @@ type CreateUserRequest struct {
 	Password string `validate:"required,password"`
 }
 
+type LoginRequest struct {
+	Email    string `validate:"required,email"`
+	Password string `validate:"required,password"`
+}
+
 func _passwordValidator(fl validator.FieldLevel) bool {
 	password := fl.Field().String()
 
@@ -52,6 +57,15 @@ func (req *CreateUserRequest) Validate() error {
 
 	customValidator := CustomValidator{tag: "password", fn: _passwordValidator}
 
+	err := _validate(req, customValidator)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (req *LoginRequest) Validate() error {
+	customValidator := CustomValidator{tag: "password", fn: _passwordValidator}
 	err := _validate(req, customValidator)
 	if err != nil {
 		return err

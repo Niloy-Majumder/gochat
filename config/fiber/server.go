@@ -1,6 +1,7 @@
 package fiber
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
 	"gochat/cmd"
 	"gochat/db/mongoDB"
@@ -56,17 +57,34 @@ func (s *Server) setEnvValues() {
 }
 
 func errorHandler(c *fiber.Ctx, err error) error {
+	// Status code defaults to 500
+	code := fiber.StatusInternalServerError
 
-	return c.Status(fiber.StatusBadRequest).JSON(constants.GlobalErrorHandlerResponse{
+	// Retrieve the custom status code if it's a *fiber.Error
+	var e *fiber.Error
+	if errors.As(err, &e) {
+		code = e.Code
+	}
+
+	return c.Status(code).JSON(constants.GlobalErrorHandlerResponse{
 		Success: false,
-		Message: err.Error(),
+		Message: e.Message,
 	})
+}
+func _initMongoIndexes(client *mongoDB.MongoClient) {
+	err := client.SetIndexes("users", "email")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (s *Server) Run(preFork bool) {
 	s.app = fiber.New(fiber.Config{AppName: s.AppName + " " + s.Version, CaseSensitive: true, Prefork: preFork, ErrorHandler: errorHandler})
+
+	// MongoDB Operations -
 	mongoDB.Client = mongoDB.Client.NewMongoClient(s.Database)
 	mongoDB.Client.Connect(s.MongodbHost, s.MongodbPort)
+	_initMongoIndexes(mongoDB.Client)
 
 	cmd.HandleMiddlewares(preFork, s.app)
 	cmd.HandleRoutes(s.app)

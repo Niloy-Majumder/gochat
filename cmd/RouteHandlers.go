@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/gofiber/fiber/v2"
 	"gochat/api/v1/routes"
+	"gochat/api/v1/ws"
 )
 
 func HandleRoutes(app *fiber.App) {
@@ -12,4 +13,7 @@ func HandleRoutes(app *fiber.App) {
 
 	// User Router
 	routes.UserRouter(v1)
+
+	// SocketIO
+	ws.SocketIORouter(v1)
 }
